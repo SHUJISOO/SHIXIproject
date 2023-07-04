@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shujisoo.mapper.UserMapper">
+    <resultMap id="pageUser" type="com.shujisoo.entity.User">
+        <result column="id" property="id" />
+        <result column="username" property="username" />
+        <result column="nickname" property="nickname" />
+        <result column="email" property="email" />
+        <result column="phone" property="phone" />
+        <result column="degree" property="degree" />
+        <result column="school" property="school" />
+        <result column="create_time" property="createTime" />
+        <result column="avatar_url" property="avatarUrl" />
+        <result column="role" property="role" />
+    </resultMap>
+
+    <select id="findPage" resultMap="pageUser">
+        select * from user
+        <where>
+            <if test="username != null and username != '' and nickname != null and nickname != '' and role != null and role != ''">
+                and user.username like concat('%', #{username} ,'%') or user.nickname like concat('%', #{nickname} ,'%') or user.role like concat('%', #{role} ,'%')
+            </if>
+<!--            <if test="nickname != null and nickname != ''">-->
+<!--                and user.nickname like concat('%', #{nickname} ,'%')-->
+<!--            </if>-->
+        </where>
+        order by id desc
+    </select>
+
+    <resultMap id="resumeList" type="com.shujisoo.entity.User">
+        <result column="USERID" property="id" />
+        <result column="username" property="username" />
+        <result column="nickname" property="nickname" />
+        <result column="email" property="email" />
+        <result column="phone" property="phone" />
+        <result column="degree" property="degree" />
+        <result column="school" property="school" />
+        <result column="file_url" property="fileUrl" />
+        <collection property="jobs" javaType="java.util.ArrayList" ofType="com.shujisoo.entity.Job">
+            <result column="id" property="id" />
+            <result column="job_name" property="jobName" />
+<!--            <association property="accepts" javaType="Integer">-->
+<!--                <result column="accept" property="accepts" />-->
+<!--            </association>-->
+            <association property="accepts" javaType="Integer">
+                <result column="accept" property="accepts" />
+            </association>
+        </collection>
+<!--        <collection property="companys" javaType="java.util.ArrayList" ofType="com.shujisoo.entity.Company">-->
+<!--            <result column="company_name" property="companyName" />-->
+<!--        </collection>-->
+<!--        <collection property="accepts" javaType="java.util.ArrayList" ofType="com.shujisoo.entity.Accept">-->
+<!--            <result column="accept" property="accept" />-->
+<!--        </collection>-->
+<!--        <collection property="accepts" javaType="java.util.ArrayList" ofType="com.shujisoo.entity.Accept">-->
+<!--            <result column="accept" property="accept" />-->
+<!--        </collection>-->
+<!--        <association property="accepts" javaType="Integer">-->
+<!--            <result column="accept" property="accepts" />-->
+<!--        </association>-->
+    </resultMap>
+
+
+    <select id="findResumeById" resultMap="resumeList">
+        SELECT
+        job.id,
+        job.job_name,
+        user.id as USERID,
+        user.username,
+        user.nickname,
+        user.sex,
+        user.degree,
+        user.school,
+        user.phone,
+        user.email,
+        user.file_url,
+        job_applicant.accept
+        FROM
+        job_applicant
+        LEFT JOIN job on job.id = job_applicant.jobId
+        LEFT JOIN user on user.id = job_applicant.applicantId , company
+        <where>
+            job.id = job_applicant.jobId AND user.id = job_applicant.applicantId AND job.company_id = company.id AND company.user_id = #{id}
+            <if test="nickname != null and nickname != '' and jobName != null and jobName != ''">
+                and user.username like concat('%', #{nickname} ,'%') or job.job_name like concat('%', #{jobName} ,'%')
+            </if>
+        </where>
+    </select>
+
+    <resultMap id="deliveryList" type="com.shujisoo.entity.User">
+        <result column="id" property="id" />
+        <result column="username" property="username" />
+        <result column="nickname" property="nickname" />
+        <collection property="jobs" javaType="java.util.ArrayList" ofType="com.shujisoo.entity.Job">
+            <result column="job_name" property="jobName" />
+            <association property="accepts" javaType="Integer">
+                <result column="accept" property="accepts" />
+            </association>
+            <association property="COMPANYNAME" javaType="String">
+                <result column="company_name" property="COMPANYNAME" />
+            </association>
+            <association property="COMPANYIMG" javaType="String">
+                <result column="company_img" property="COMPANYIMG" />
+            </association>
+        </collection>
+    </resultMap>
+
+    <select id="findDeliveryOnes" resultMap="deliveryList">
+        SELECT
+        company.company_name,
+        company.company_img,
+        job_applicant.accept,
+        job.job_name,
+        user.username,
+        user.nickname,
+        user.id
+        FROM
+        job_applicant
+        LEFT JOIN user on user.id = job_applicant.applicantId
+        LEFT JOIN job on job.id = job_applicant.jobId
+        LEFT JOIN company on job.company_id = company.id
+        <where>
+            user.id = job_applicant.applicantId AND job_applicant.jobId = job.id AND job.company_id = company.id AND user.id = #{id}
+        </where>
+    </select>
+</mapper>

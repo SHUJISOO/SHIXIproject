@@ -1,0 +1,154 @@
+*{
+    margin: 0;
+    padding: 0;
+    /* color: #1f1f1f; */
+    box-sizing: border-box;
+    /* background-color: #f6f6f6; */
+}
+a {
+    text-decoration: none;
+    color: #666;
+}
+html,body{
+    height: 100%;
+    background-color: #f6f6f6;
+}
+.el-button {
+    width: 100px;
+    height: 28px;
+    font-size: 14px!important;
+    font-weight: bold!important;
+    border: none!important;
+    border-radius: 10px!important;
+}
+.el-tag {
+    width: 60px;
+    height: 30px;
+    font-size: 13px!important;
+    border: none!important;
+    border-radius: 10px!important;
+}
+.Add {
+    background-color:#eefaf9!important;
+    color:#5dcfc6!important;
+}
+.DIYbtn {
+    background-color:#709fba!important;
+    color: #fff!important;
+}
+/** 修改全局的滚动条 */
+/** 滚动条的宽度 */
+::-webkit-scrollbar {
+    width: 6px;
+}
+/* 滚动条的滑块 */
+::-webkit-scrollbar-thumb {
+    /* background-color: #5dcfc6; */
+    background-color: #f4612d;
+    border-radius: 3px;
+}
+/* 修改表格(el-table)的滚动条 */
+.el-table__body-wrapper::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+/* 滚动条的滑块 */
+.el-table__body-wrapper::-webkit-scrollbar-thumb {
+    /* background-color: #5dcfc6; */
+    background-color: #f4612d;
+    border-radius: 3px;
+}
+.pageHeader {
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
+    font-size: 22px;
+    font-weight: bold;
+}
+.layout {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+.tag {
+    width: auto;
+    margin-right: 15px;
+    padding: 0 10px;
+    background-color:#fff7f3!important;
+    color:#f4612d!important;
+}
+.infoTag {
+    width: auto;
+    margin-right: 15px;
+    padding: 0 10px;
+    background-color:#f4f4f5!important;
+    color:#909399!important;
+}
+.cardBox {
+    border-radius: 10px;
+    position: relative;
+    padding: 20px;
+    margin-bottom: 20px;
+    /* flex-direction: row; */
+    background-color: #fff;
+  }
+.singleLine {
+    /*第一步： 溢出隐藏 */
+    overflow: hidden;
+    /* 第二步：让文本不会换行， 在同一行继续 */
+    white-space: nowrap;
+    /* 第三步：用省略号来代表未显示完的文本 */
+    text-overflow: ellipsis;
+}
+.Lines {
+    /* 1.溢出隐藏 */
+    overflow: hidden;
+    /* 2.用省略号来代替超出文本 */
+    text-overflow: ellipsis;
+    /* 3.设置盒子属性为-webkit-box  必须的 */
+    display: -webkit-box;
+    /* 4.-webkit-line-clamp 设置为2，表示超出2行的部分显示省略号，如果设置为3，那么就是超出3行部分显示省略号 */
+    -webkit-line-clamp: 2;
+    /* 5.字面意思：单词破坏：破坏英文单词的整体性，在英文单词还没有在一行完全展示时就换行  即一个单词可能会被分成两行展示 */
+    word-break: break-all;
+    /* 6.盒子实现多行显示的必要条件，文字是垂直展示，即文字是多行展示的情况下使用 */
+    -webkit-box-orient: vertical;
+}
+.mavon-editor {
+    z-index: 0;
+}
+.el-pagination.is-background .el-pager li:not(.disabled).active {
+    background-color: #f4612d!important;
+    color: #FFF!important;
+}
+.el-pager li:hover {
+    color: #f4612d!important;
+}
+.el-menu-item.is-active {
+    color: #f4612d!important;
+}
+.el-radio-button__orig-radio:checked+.el-radio-button__inner {
+    color: #FFF!important;
+    background-color: #f4612d!important;
+    border-color: #f4612d!important;
+    box-shadow: -1px 0 0 0 #f4612d!important;
+}
+.el-radio-button__inner:hover {
+    color: #f4612d!important;
+}
+.el-radio__input.is-checked+.el-radio__label {
+    color: #f4612d!important;
+}
+.el-radio__input.is-checked .el-radio__inner {
+    border-color: #f4612d!important;
+    background: #f4612d!important;
+}
+.el-radio__inner:hover {
+    border-color: #f4612d!important;
+}
+.el-input__inner:focus {
+    border-color: #f4612d!important;
+}
+.el-form-item.is-error .el-input__inner, .el-form-item.is-error .el-input__inner:focus, .el-form-item.is-error .el-textarea__inner, .el-form-item.is-error .el-textarea__inner:focus, .el-message-box__input input.invalid, .el-message-box__input input.invalid:focus {
+    border-color: #ff0000!important;
+}

@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shujisoo.mapper.JobMapper">
+<!--    <select id="findCompanyPage" resultType="com.shujisoo.entity.Company">-->
+<!--        select company.*, user.nickname as name from company-->
+<!--        left join user-->
+<!--        on company.user_id = user.id-->
+<!--    </select>-->
+
+    <resultMap id="AllList" type="com.shujisoo.entity.Job">
+        <result column="id" property="id" />
+        <result column="job_name" property="jobName" />
+        <result column="job_description" property="jobDescription" />
+        <result column="job_introduction" property="jobIntroduction" />
+        <result column="requirement" property="requirement" />
+        <result column="salary" property="salary" />
+        <result column="is_selected" property="isSelected" />
+        <result column="hot_job" property="hotJob" />
+        <result column="company_id" property="companyId" />
+        <collection property="users" javaType="java.util.ArrayList" ofType="com.shujisoo.entity.User">
+            <!--            <result column="id" property="id" />-->
+            <result column="nickname" property="nickname" />
+            <result column="avatar_url" property="avatarUrl" />
+        </collection>
+        <collection property="companys" javaType="java.util.ArrayList" ofType="com.shujisoo.entity.Company">
+            <result column="COMPANYID" property="id" />
+            <result column="company_name" property="companyName" />
+            <result column="company_address" property="companyAddress" />
+            <result column="company_description" property="companyDescription" />
+            <result column="company_introduction" property="companyIntroduction" />
+            <result column="company_img" property="companyImg" />
+            <result column="hot" property="hot" />
+            <result column="user_id" property="userId" />
+        </collection>
+    </resultMap>
+
+    <select id="findAllList" resultMap="AllList">
+        SELECT
+        job.id,
+        job.job_name,
+        job.salary,
+        job.job_description,
+        job.job_introduction,
+        job.requirement,
+        job.is_selected,
+        job.hot_job,
+        job.company_id,
+        company.id as COMPANYID,
+        company.company_name,
+        company.company_address,
+        company.company_description,
+        company.company_introduction,
+        company.company_img,
+        company.hot,
+        company.user_id,
+        user.nickname,
+        user.avatar_url
+        FROM
+        company
+        LEFT JOIN job ON job.company_id=company.id, user
+        <where>
+            user.id = company.user_id AND company.id = job.company_id AND job.is_delete = 0
+        </where>
+    </select>
+
+    <select id="findAllListPage" resultMap="AllList">
+        SELECT
+        job.id,
+        job.job_name,
+        job.salary,
+        job.job_description,
+        job.job_introduction,
+        job.requirement,
+        job.is_selected,
+        job.hot_job,
+        job.company_id,
+        company.id as COMPANYID,
+        company.company_name,
+        company.company_address,
+        company.company_description,
+        company.company_introduction,
+        company.company_img,
+        company.hot,
+        company.user_id,
+        user.nickname,
+        user.avatar_url
+        FROM
+        company
+        LEFT JOIN job ON job.company_id=company.id, user
+        <where>
+            user.id = company.user_id AND company.id = job.company_id AND job.is_delete = 0
+            <if test="jobName != '' or address != '' or requirement != ''">
+                and ( job.job_name like concat('%', #{jobName} ,'%') and job.requirement like concat('%', #{requirement} ,'%') and company.company_address like concat('%', #{address} ,'%'))
+            </if>
+        </where>
+    </select>
+
+    <select id="findInfoById" resultMap="AllList">
+        SELECT
+        job.id,
+        job.job_name,
+        job.salary,
+        job.job_description,
+        job.job_introduction,
+        job.requirement,
+        job.is_selected,
+        job.hot_job,
+        job.company_id,
+        company.id as COMPANYID,
+        company.position,
+        company.company_name,
+        company.company_address,
+        company.company_description,
+        company.company_introduction,
+        company.company_img,
+        company.hot,
+        company.user_id,
+        user.nickname,
+        user.avatar_url
+        FROM
+        company
+        LEFT JOIN job ON job.company_id=company.id, user
+        <where>
+            user.id = company.user_id AND company.id = job.company_id AND job.id= #{id} AND job.is_delete = 0
+        </where>
+    </select>
+
+    <insert id="setSendResume">
+        insert into job_applicant(jobId, applicantId) values(#{jobId}, #{applicantId})
+    </insert>
+
+    <delete id="deleteSendResume">
+        delete from job_applicant where jobId = #{jobId} and applicantId = #{applicantId}
+    </delete>
+
+    <update id="setAgreeOrRefuseResume">
+        update job_applicant set accept = #{accept} where jobId = #{jobId} and applicantId = #{applicantId}
+    </update>
+
+
+<!--    <resultMap id="resumeList" type="com.shujisoo.entity.User">-->
+<!--        <result column="username" property="username" />-->
+<!--        <result column="nickname" property="nickname" />-->
+<!--        <result column="email" property="email" />-->
+<!--        <result column="phone" property="phone" />-->
+<!--        <result column="degree" property="degree" />-->
+<!--        <result column="school" property="school" />-->
+<!--        <result column="file_url" property="fileUrl" />-->
+<!--        <collection property="jobs" javaType="java.util.ArrayList" ofType="com.shujisoo.entity.Job">-->
+<!--            <result column="job_name" property="jobName" />-->
+<!--        </collection>-->
+<!--        <collection property="companys" javaType="java.util.ArrayList" ofType="com.shujisoo.entity.Company">-->
+<!--            <result column="company_name" property="companyName" />-->
+<!--        </collection>-->
+<!--        <collection property="accepts" javaType="java.util.ArrayList" ofType="com.shujisoo.entity.Accept">-->
+<!--            <result column="accept" property="accept" />-->
+<!--        </collection>-->
+<!--    </resultMap>-->
+
+<!--    <select id="findResumeById" resultMap="resumeList">-->
+<!--        SELECT-->
+<!--        job.job_name,-->
+<!--        user.username,-->
+<!--        user.nickname,-->
+<!--        user.sex,-->
+<!--        user.degree,-->
+<!--        user.school,-->
+<!--        user.phone,-->
+<!--        user.email,-->
+<!--        user.file_url,-->
+<!--        job_applicant.accept,-->
+<!--        company.company_name-->
+<!--        FROM-->
+<!--        job_applicant-->
+<!--        LEFT JOIN job on job.id = job_applicant.jobId-->
+<!--        LEFT JOIN user on user.id = job_applicant.applicantId , company-->
+<!--        <where>-->
+<!--            job.id = job_applicant.jobId AND user.id = job_applicant.applicantId AND job.company_id = company.id AND company.user_id = #{id}-->
+<!--        </where>-->
+<!--    </select>-->
+
+
+
+    <!--    <select id="findAllCompany" resultType="com.shujisoo.entity.Company">-->
+    <!--        select company.*, user.nickname as name from company-->
+    <!--        left join user-->
+    <!--        on company.user_id = user.id-->
+    <!--    </select>-->
+
+    <!--    <resultMap id="AllJobs" type="com.shujisoo.entity.Company">-->
+    <!--        <result column="id" property="id" />-->
+    <!--        <result column="company_name" property="companyName" />-->
+    <!--        <result column="company_address" property="companyAddress" />-->
+    <!--        <result column="company_description" property="companyDescription" />-->
+    <!--        <result column="company_introduction" property="companyIntroduction" />-->
+    <!--        <result column="company_img" property="companyImg" />-->
+    <!--        <result column="hot" property="hot" />-->
+    <!--        <result column="user_id" property="userId" />-->
+    <!--        <collection property="jobs" javaType="java.util.ArrayList" ofType="com.shujisoo.entity.Job">-->
+    <!--            <result column="id" property="id" />-->
+    <!--            <result column="job_name" property="jobName" />-->
+    <!--            <result column="job_description" property="jobDescription" />-->
+    <!--            <result column="job_introduction" property="jobIntroduction" />-->
+    <!--            <result column="requirement" property="requirement" />-->
+    <!--            <result column="salary" property="salary" />-->
+    <!--            <result column="isSelected" property="isSelected" />-->
+    <!--            <result column="hotJob" property="hotJob" />-->
+    <!--            <result column="company_id" property="companyId" />-->
+    <!--        </collection>-->
+    <!--    </resultMap>-->
+
+    <!--    <select id="findAllJobs" resultMap="AllJobs">-->
+    <!--        select company.*, job.* from job-->
+    <!--        left join company-->
+    <!--        on company.id = job.company_id-->
+    <!--    </select>-->
+
+
+</mapper>
